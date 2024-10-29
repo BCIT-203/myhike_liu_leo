@@ -26,18 +26,14 @@ function getNameFromAuth() {
         if (user) {
             // Do something for the currently logged-in user here:
             console.log(user.uid); //print the uid in the browser console
-            console.log(user.displayName);  //print the user name in the browser console
-            userName = user.displayName;
-
-            //method #1:  insert with JS
-            document.getElementById("name-goes-here").innerText = userName;
-
-            //method #2:  insert using jquery
-            //$("#name-goes-here").text(userName); //using jquery
-
-            //method #3:  insert using querySelector
-            // document.querySelector("#name-goes-here").innerText = userName
-
+            currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
+            currentUser.get().then(userDoc => {
+                // Get the user name
+                let userName = userDoc.data().name;
+                console.log(userName);
+                //$("#name-goes-here").text(userName); // jQuery
+                document.getElementById("name-goes-here").innerText = userName;
+            })
         } else {
             // No user is signed in.
             console.log ("No user is logged in");
